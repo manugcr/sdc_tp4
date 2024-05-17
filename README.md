@@ -30,11 +30,26 @@ Tambien es importante considerar tener todas las dependencias necesarias:
 sudo apt-get install build-essential checkinstall linux-source
 ```
 
-Se descargo el codigo fuente del kernel de linux:
+En caso de que falle (por ejemplo, en ubuntu 24.04 tira error), probar lo siguiente:
+
+```bash
+sudo apt install build-essential 
+sudo apt install checkinstall 
+sudo apt install linux-source
+```
+
+Se descargo el codigo fuente del kernel de linux, en este caso, la versión 6.8.0, donde el archivo comprimido se llama "linux-source-6.8.0.tar.bz2", ahora debemos extraerla:
 
 ```bash
 cd /usr/src
-tar 
+ls # Para visualizar qué versión se ha descargado
+sudo tar -xvf linux-source-6.8.0.tar.bz2
+```
+
+Luego, desde la raiz del proyecto:
+
+```bash
+cd kenel-modules-main/part1/module/
 ```
 
 ---
