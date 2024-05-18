@@ -1,1 +1,0 @@
-cmd_/home/manu/facultad/sdcomp/sdc_tp4/kenel-modules-main/part1/module/Module.symvers := sed 's/\.ko$$/\.o/' /home/manu/facultad/sdcomp/sdc_tp4/kenel-modules-main/part1/module/modules.order | scripts/mod/modpost -m -a  -o /home/manu/facultad/sdcomp/sdc_tp4/kenel-modules-main/part1/module/Module.symvers -e -i Module.symvers   -T -

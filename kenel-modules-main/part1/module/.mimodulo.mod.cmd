@@ -1,1 +1,0 @@
-cmd_/home/manu/facultad/sdcomp/sdc_tp4/kenel-modules-main/part1/module/mimodulo.mod := { echo  /home/manu/facultad/sdcomp/sdc_tp4/kenel-modules-main/part1/module/mimodulo.o;  echo; } > /home/manu/facultad/sdcomp/sdc_tp4/kenel-modules-main/part1/module/mimodulo.mod
