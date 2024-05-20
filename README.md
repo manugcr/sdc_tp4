@@ -205,17 +205,17 @@ $ ls /usr/local/bin/
 
 <p align="center">
   <img src="./imgs/checkinstall1.png"><br>
-  <em>Fig 3. Checkinstall pre-stage.</em>
+  <em>Fig 3. Checkinstall setup.</em>
 </p>
 
 <p align="center">
   <img src="./imgs/checkinstall2.png"><br>
-  <em>Fig 4. Checkinstall final stage.</em>
+  <em>Fig 4. Checkinstall paso final.</em>
 </p>
 
 <p align="center">
   <img src="./imgs/checkinstall3.png"><br>
-  <em>Fig 5. Checkinstall execution.</em>
+  <em>Fig 5. Ejecucion del paquete.</em>
 </p>
 
 ---
@@ -253,6 +253,28 @@ En la siguiente imagen podemos ver el proceso de firma y carga del modulo en el 
 <p align="center">
   <img src="./imgs/signature2.png"><br>
   <em>Fig 6. Signature final.</em>
+</p>
+
+Si alguien con secure boot habilitado quisise cargar un modulo firmado por mi, el firmware del sistema UEFI verificaria la firma digital antes de que se cargue al sistema, si esta firma no es una clave reconocida lo mas probable es que el sistema rechace la carga del modulo.
+
+---
+
+## Que diferencias se pueden obersevar entre estos dos modinfo?
+(...)
+
+## Que drivers estan cargados en mi sistema?
+Con el comando `lsmod` es posible ver todos los modulos cargados en el sistema, en la siguiente imagen se puede ver un ejemplo de la salida de este comando con los primeros 40 modulos. Donde la tercer columna `Used` indica la cantidad de veces que el modulo ha sido referenciado.
+
+<p align="center">
+  <img src="./imgs/kernel-list1.png"><br>
+  <em>Fig 7. Modulos de kernel listados.</em>
+</p>
+
+Si comparamos con otra salida de `lsmod` desde otra computadora podemos utilizar el comando `diff` para ver las diferencias entre los modulos cargados, o tambien podemos utilizar `sort` en conjunto con `uniq` para ver solo las lineas unicas.
+
+<p align="center">
+  <img src="./imgs/kernel-list2.png"><br>
+  <em>Fig 8. Modulos de kernel diferentes.</em>
 </p>
 
 ---
