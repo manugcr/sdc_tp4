@@ -1,0 +1,1 @@
+cmd_/home/manu/facultad/sdcomp/sdc_tp4/src/module/Module.symvers := sed 's/\.ko$$/\.o/' /home/manu/facultad/sdcomp/sdc_tp4/src/module/modules.order | scripts/mod/modpost -m -a  -o /home/manu/facultad/sdcomp/sdc_tp4/src/module/Module.symvers -e -i Module.symvers   -T -

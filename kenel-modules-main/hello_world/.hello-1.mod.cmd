@@ -1,0 +1,1 @@
+cmd_/home/manu/facultad/sdcomp/sdc_tp4/kenel-modules-main/hello_world/hello-1.mod := { echo  /home/manu/facultad/sdcomp/sdc_tp4/kenel-modules-main/hello_world/hello-1.o;  echo; } > /home/manu/facultad/sdcomp/sdc_tp4/kenel-modules-main/hello_world/hello-1.mod

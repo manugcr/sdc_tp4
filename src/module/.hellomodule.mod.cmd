@@ -1,0 +1,1 @@
+cmd_/home/manu/facultad/sdcomp/sdc_tp4/src/module/hellomodule.mod := { echo  /home/manu/facultad/sdcomp/sdc_tp4/src/module/hellomodule.o;  echo; } > /home/manu/facultad/sdcomp/sdc_tp4/src/module/hellomodule.mod

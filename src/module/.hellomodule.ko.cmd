@@ -1,0 +1,1 @@
+cmd_/home/manu/facultad/sdcomp/sdc_tp4/src/module/hellomodule.ko := ld -r -m elf_x86_64 -z noexecstack --build-id=sha1  -T scripts/module.lds -o /home/manu/facultad/sdcomp/sdc_tp4/src/module/hellomodule.ko /home/manu/facultad/sdcomp/sdc_tp4/src/module/hellomodule.o /home/manu/facultad/sdcomp/sdc_tp4/src/module/hellomodule.mod.o;  true
