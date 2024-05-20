@@ -24,29 +24,29 @@ Como base se necesita tener instalado linux, por otro lado vamos a utilizar un r
 Tambien es importante considerar tener todas las dependencias necesarias:
 
 ```bash
-sudo apt-get install build-essential checkinstall linux-source
+$ sudo apt-get install build-essential checkinstall linux-source
 ```
 
 En caso de que falle (por ejemplo, en ubuntu 24.04 tira error), probar lo siguiente:
 
 ```bash
-sudo apt install build-essential 
-sudo apt install checkinstall 
-sudo apt install linux-source
+$ sudo apt install build-essential 
+$ sudo apt install checkinstall 
+$ sudo apt install linux-source
 ```
 
 Se descargo el codigo fuente del kernel de linux, en este caso, la versión `6.8.0`, donde el archivo comprimido se llama `linux-source-6.8.0.tar.bz2`, ahora debemos extraerla:
 
 ```bash
-cd /usr/src
-ls # Para visualizar qué versión se ha descargado
-sudo tar -xvf linux-source-6.8.0.tar.bz2
+$ cd /usr/src
+$ ls # Para visualizar qué versión se ha descargado
+$ sudo tar -xvf linux-source-6.8.0.tar.bz2
 ```
 
 Luego, desde la raiz del proyecto:
 
 ```bash
-cd kenel-modules-main/part1/module/
+$ cd kenel-modules-main/part1/module/
 ```
 
 En el código `mimodulo.c` hay una advertencia que se puede solucionar fácilmente agregando las siguientes línes antes de las funciones:
@@ -59,12 +59,12 @@ void modulo_lin_clean(void);
 **IMPORTANTE**: Antes de ejecutar el make, verificar que la ruta no contenga carácteres especiales, como por ejemplo, espacio " "
 
 ```bash
-make
-sudo dmesg -C
-sudo insmod mimodulo.ko
-sudo dmesg
-sudo rmmod mimodulo
-sudo dmesg
+$ make
+$ sudo dmesg -C
+$ sudo insmod mimodulo.ko
+$ sudo dmesg
+$ sudo rmmod mimodulo
+$ sudo dmesg
 ```
 
 Con esto, compilamos el módulo, limpiamos el historial en dmesg, instalamos el módulo, vemos los mensajes con dmesg y se comprueba la carga. Luego, removemos el módulo y verificamos. En caso de que hayan problemas en la carga, verificar que se compile para el kernel que se está utilizando, y si no se resuelve, eliminar los kernels y headers anteriores (que no sea el actual).
@@ -99,6 +99,7 @@ Limitar el acceso a dispositivos de hardware críticos mediante configuraciones 
 ---
 
 ## Modulos vs Programas
+La diferencia entre un modulo y un programa es que un módulo es un fragmento de código que se puede cargar y descargar en el kernel según sea necesario, mientras que un programa es un conjunto de instrucciones que se ejecutan en el espacio de usuario. Los módulos extienden la funcionalidad del kernel, mientras que los programas se ejecutan en el espacio de usuario y pueden interactuar con el kernel a través de llamadas al sistema.
 
 ### Cómo empiezan y terminan los módulos y programas?
 A diferencia de un programa convencional, en el que programa principal comienza en un main y termina devolviendo un número para notificar si finalizó correctamente o con errores, en un módulo se definen dos funciones, una para el inicio y la otra para el fin. Se puede ver en el código de ejemplo, que hay una línea que dice `module_init(modulo_lin_init);` que indica que el módulo comienza en la función modulo_lin_init (esto sería como un setup del módulo), y otra función, `module_exit(modulo_lin_clean);`, que define que `modulo_lin_clean` se utilizará para cuando se quiera descargar o remover el módulo del kernel.
@@ -130,7 +131,7 @@ Compilando el codigo con `gcc -Wall -o ex_printf ex_printf.c` y ejecutando strac
 Tambien podemos ver la lista ordenada por syscall y el tiempo de ejecucion utilizado.
 
 ```bash
-manu@manu:~/facultad/sdcomp/sdc_tp4/src$ strace -c ./ex_printf 
+$ strace -c ./ex_printf 
 Hello world from printf!
 % time     seconds  usecs/call     calls    errors syscall
 ------ ----------- ----------- --------- --------- ----------------
@@ -277,6 +278,52 @@ Si comparamos con otra salida de `lsmod` desde otra computadora podemos utilizar
   <em>Fig 8. Modulos de kernel diferentes.</em>
 </p>
 
+Si ahora quisiese saber que modulos NO estan cargados pero estan disponibles en mi sistema, puedo usar esta misma salida de `lsmod` y compararla con la salida del sistema en `/lib/modules/$(uname -r)/kernel/` para ver que modulos estan disponibles pero no estan cargados.
+
+```bash
+$ lsmod > loaded_modules.txt
+$ awk '{print $1}' loaded_modules.txt > loaded_modules_names.txt
+$ find /lib/modules/$(uname -r)/kernel/ -type f -name '*.ko' > available_modules.txt
+$ awk -F'/' '{print $NF}' available_modules.txt | sed 's/.ko//' > available_module_names.txt
+$ echo "Muestro los primeros 20 modulos que no estan cargados pero si disponibles"
+$ comm -23 <(sort available_module_names.txt) <(sort loaded_module_names.txt)
+
+104-quad-8
+3c509
+3c574_cs
+3c589_cs
+3c59x
+3w-9xxx
+3w-sas
+3w-xxxx
+53c700
+6lowpan
+6pack
+8021q
+8139cp
+8139too
+8250_dw
+8250_exar
+8250_lpss
+8250_men_mcb
+8255
+8255_pci
+```
+
+Cuando un driver de un dispositivo no esta disponible en el sistema, el driver asociado generalmente no funcionara correctamente o no funcionara en absoluto. Es posible que el sistema operativo no reconozca el dispositivo en absoluto o este tenga funcionalidad limitada, pueden llegar a aparecer mensajes de error disponibles a traves de `dmesg` o en los archivos de registro de sistema `/var/log/`.
+
+Uno de estos errores posibles es un **segmentation fault** que se produce cuando un programa intenta acceder a una parte de la memoria a la que no tiene permiso de acceso, o cuando intenta escribir en una parte de la memoria que no es modificable.
+
+Cuando un programa intenta acceder a memoria no permitida, el hardware genera una excepcion de fallo de pagina (page fault) y el **kernel** maneja esta excepcion de la siguiente manera:
+
+1. Detecta el error y genera una interrupcion de page fault.
+2. Interrumpe el kernel con un controlador de page fault.
+3. El kernel verifica si el acceso es valido o no.
+4. Si el acceso es invalido, el kernel envia una señal `SIGSEGV` de segmentation fault al proceso que causo el error.
+5. El proceso recibe la señal y generalmente termina con un mensaje de error o un coredump.
+
+A diferencia del kernel, el programa puede elegir como responder a esta señal, por ejemplo, puede ignorarla, manejarla o terminar el proceso de manera controlada con una funcion `void handle_sigsegv(int sig)`. 
+ 
 ---
 
 ## Bibliografia
