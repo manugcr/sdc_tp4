@@ -260,8 +260,6 @@ Si alguien con secure boot habilitado quisise cargar un modulo firmado por mi, e
 
 ---
 
-## Que diferencias se pueden obersevar entre estos dos modinfo?
-(...)
 
 ## Que drivers estan cargados en mi sistema?
 Con el comando `lsmod` es posible ver todos los modulos cargados en el sistema, en la siguiente imagen se puede ver un ejemplo de la salida de este comando con los primeros 40 modulos. Donde la tercer columna `Used` indica la cantidad de veces que el modulo ha sido referenciado.
